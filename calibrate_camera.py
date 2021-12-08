@@ -15,11 +15,11 @@ class CameraCalibration():
         if os.path.exists(configs_folder):
             try:
                 files = ['cam_mtx.npy', 'dist.npy', 'new_cam_matrix.npy', 'inverse_new_cam_matrix.npy']
-                contets = []
+                contents = []
                 for fi in files:
                     with open(os.path.join(configs_folder, fi), 'rb') as f:
-                        contets.append(np.load(f))
-                self.cam_mtx, self.dist, self.newcam_mtx, self.inverse_new_cam_matrix = contets
+                        contents.append(np.load(f))
+                self.cam_mtx, self.dist, self.newcam_mtx, self.inverse_new_cam_matrix = contents
             except:
                 self.cam_mtx, self.dist, self.newcam_mtx, self.inverse_new_cam_matrix = [None]*4
         else:

@@ -1,6 +1,7 @@
 import pyrealsense2 as rs
 import numpy as np
 import logging
+import time
 
 ## 
 #  @brief Get configuration of the sensors. It is necessary for enable streams.
@@ -59,7 +60,7 @@ def enable_stream(config, rows = 640, cols = 480, framerate = 30):
     else:
         depth_cols = cols
     config.enable_stream(rs.stream.depth, depth_rows, depth_cols, rs.format.z16, framerate)
-    config.enable_stream(rs.stream.color, rows, cols, rs.format.bgr8, framerate)
+    config.enable_stream(rs.stream.color, rows, cols, rs.format.rgb8, framerate)
 
 
 ## 
@@ -151,8 +152,13 @@ class RealsenseController():
         '''
         Initialize the camera streams, start pipeline
         '''
+        self.profile = self.camera_pipeline.start(self.camera_config)
+        device = self.profile.get_device().query_sensors()[1]
+        device.set_option(rs.option.enable_auto_white_balance, True)
+        device.set_option(rs.option.enable_auto_exposure, True)
+        time.sleep(2)
+        
         enable_stream(self.camera_config, width, height, frame_rate)
-        self.camera_pipeline.start(self.camera_config)
 
     def get_frames(self):
         '''
